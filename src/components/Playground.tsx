@@ -3,8 +3,9 @@ import demo from "../assets/demo.png";
 import { Feature } from "ol";
 import Map from "ol/Map.js";
 import View from "ol/View.js";
+import { Coordinate } from "ol/coordinate";
 import { getCenter } from "ol/extent";
-import { LineString, Polygon } from "ol/geom";
+import { Circle, LineString, Point, Polygon } from "ol/geom";
 import { Draw, Modify, Snap } from "ol/interaction";
 import { Vector as VectorLayer } from "ol/layer.js";
 import ImageLayer from "ol/layer/Image";
@@ -35,19 +36,23 @@ const dummyData2 = [
   [611.5282199384079, 289.30004005714966],
   [679.3074695112618, 382.9387015166072],
 ];
+type DrawDataType = {
+  type: string;
+  coordinates: number[][];
+};
 
 const Playground = () => {
-  const mapRef = useRef(null as any);
+  const mapRef = useRef<any>(null);
   const [drawMode, setDrawMode] = useState<DrawModeType>("LineString");
-  const [drawData, setDrawData] = useState<any[]>(
+  const [drawData, setDrawData] = useState<DrawDataType[]>(
     localStorage.getItem("drawData")
       ? JSON.parse(localStorage.getItem("drawData") || "")
       : []
   );
   const [scaling, setScaling] = useState(false);
   const [saveState, setSaveState] = useState(false);
-  const [saveItems, setSaveItems] = useState(null) as any;
-  const vectorLayerRef = useRef(null as any);
+  const [saveItems, setSaveItems] = useState<DrawDataType | null>(null);
+  const vectorLayerRef = useRef<any>(null);
 
   const [scaleData, setScaleData] = useState(
     localStorage.getItem("scalingData")
@@ -67,7 +72,7 @@ const Playground = () => {
     return 1;
   };
 
-  const getLength = (item) => {
+  const getLength = (item:DrawDataType) => {
     if (item.type === "LineString") {
       const feature = new Feature({
         geometry: new LineString(item.coordinates),
@@ -104,7 +109,7 @@ const Playground = () => {
       }),
     });
 
-    let features = [];
+    const features:any = [];
     if (scaleData) {
       const newScaleData = new Feature({
         geometry: new LineString(scaleData?.coordinates),
@@ -118,11 +123,18 @@ const Playground = () => {
           geometry: new LineString(item.coordinates),
         });
         features.push(newLine);
-      } else if (item.type === "Polygon") {
+      }
+      if (item.type === "Polygon") {
         const newPolygon = new Feature({
           geometry: new Polygon([item.coordinates]),
         });
         features.push(newPolygon);
+      }
+      if (item.type === "Point") {
+        const newPoint = new Feature({
+          geometry: new Point(item.coordinates as any),
+        });
+        features.push(newPoint);
       }
     });
 
@@ -133,15 +145,26 @@ const Playground = () => {
     });
     const vector = new VectorLayer({
       source: source,
-      style: new Style({
-        fill: new Fill({
-          color: "rgba(255, 255, 255, 0.2)",
-        }),
-        stroke: new Stroke({
-          color: "#ffcc33",
-          width: 2,
-        }),
-      }),
+      // style: new Style({
+      //   fill: new Fill({
+      //     color: "rgba(255, 255, 255, 0.2)",
+      //   }),
+      //   stroke: new Stroke({
+      //     color: "#ffcc33",
+      //     width: 2,
+      //   }),
+      //   image: new Circle({
+      //     color: "#ffcc33",
+      //     width: 2,
+      //   })
+      // }),
+      style: {
+        'fill-color': 'rgba(255, 255, 255, 0.2)',
+        'stroke-color': '#ffcc33',
+        'stroke-width': 2,
+        'circle-radius': 7,
+        'circle-fill-color': '#f43f5e',
+      },
     });
     vectorLayerRef.current = vector;
     map.addLayer(vector);
@@ -152,15 +175,18 @@ const Playground = () => {
     });
     map.addInteraction(draw);
 
-    const modify = new Modify({ source: source });
-    map.addInteraction(modify);
+    // const modify = new Modify({ source: source });
+    // map.addInteraction(modify);
+
+    // modify.on("modifyend", (event: any) => {
+    //   console.log('modified');
+      
+    // })
 
     const snap = new Snap({ source: source });
     map.addInteraction(snap);
-    
 
     draw.on("drawend", (event: any) => {
-      
       if (scaling) {
         const scaleDataToSet = {
           type: "scale",
@@ -171,7 +197,6 @@ const Playground = () => {
         localStorage.setItem("scalingData", JSON.stringify(scaleDataToSet));
         setScaleData(scaleDataToSet);
         setScaling(false);
-        
       } else {
         const feature = event.feature;
         setSaveItems({
@@ -180,13 +205,6 @@ const Playground = () => {
         });
         setSaveState(true);
       }
-      // console.log(feature.getGeometry()?.getCoordinates());
-      // console.log(feature.getGeometry()?.getLength() * getUnitScale() + "m");
-
-      //   const polygon = feature.getGeometry();
-      //   console.log(polygon);
-
-      //   console.log(polygon?.getCoordinates());
     });
 
     document.getElementById("undo")?.addEventListener("click", function () {
@@ -195,14 +213,13 @@ const Playground = () => {
 
     return () => {
       map.removeInteraction(draw);
-      map.removeInteraction(modify);
+      // map.removeInteraction(modify);
       map.removeInteraction(snap);
       map.dispose();
     };
-  }, [drawMode, scaling]);
+  }, [drawMode, scaling, drawData, scaleData]);
 
   console.log(scaling);
-  
 
   const clearAll = () => {
     const vectorSource = vectorLayerRef.current.getSource();
@@ -232,7 +249,7 @@ const Playground = () => {
                   "drawData",
                   JSON.stringify([...drawData, saveItems])
                 );
-                setDrawData([...drawData, saveItems]);
+                setDrawData([...drawData, saveItems] as any);
                 setSaveState(false);
                 setSaveItems(null);
               }}
@@ -248,7 +265,7 @@ const Playground = () => {
         className="map w-full h-[500px] border-2 border-blue-300"
         style={{ background: demo }}
       ></div>
-      <div className=" flex gap-4">
+      <div className=" flex gap-4 items-center">
         <button className="p-2 border border-gray-300" id="undo">
           Undo
         </button>
@@ -265,11 +282,11 @@ const Playground = () => {
             setScaling(true);
           }}
           className="p-2 border border-gray-300"
-         
         >
           Set Scale
         </button>
         <select
+        className="p-2 bg-white border border-gray-300"
           value={drawMode}
           onChange={(e) => setDrawMode(e.target.value as DrawModeType)}
         >
@@ -283,7 +300,7 @@ const Playground = () => {
           {scaling ? (
             "Scaling"
           ) : (
-            <p>Scale: {`${scaleData?.value} ${scaleData?.unit}`}</p>
+            <p>Scale: {`${scaleData?.value ||''} ${scaleData?.unit || ''}`}</p>
           )}
         </p>
       </div>
@@ -291,19 +308,24 @@ const Playground = () => {
         <h2>Drawn Items</h2>
         <ul className="flex flex-col gap-2">
           {drawData.map((item, index) => (
-            <li key={index} className="flex items-center gap-4 border border-blue-300 p-1">
+            <li
+              key={index}
+              className="flex items-center gap-4 border border-blue-300 p-1"
+            >
               <p>{item.type}</p>
               <p>
                 {getLength(item)} {scaleData?.unit}
               </p>
               <button
-          onClick={() => {
-          }}
-          className="p-1 border border-gray-300 ml-auto"
-         
-        >
-          Delete
-        </button>
+                onClick={() => {localStorage.setItem(
+                  "drawData",
+                  JSON.stringify(drawData.filter((_, i) => i !== index))
+                );
+                setDrawData(drawData.filter((_, i) => i !== index))}}
+                className="p-1 border border-gray-300 ml-auto"
+              >
+                Delete
+              </button>
             </li>
           ))}
         </ul>
