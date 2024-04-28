@@ -72,14 +72,14 @@ const Playground = () => {
           visible: true,
           preload: Infinity,
           source: new BingMaps({
-            key: import.meta.env.BING_MAPS_API_KEY || "",
+            key: import.meta.env.VITE_BING_MAPS_API_KEY || "",
             imagerySet: changeStates.mapStyle,
             // placeholderTiles: false, // Optional. Prevents showing of BingMaps placeholder tiles
           }),
         })
       );
     }
-    if (!import.meta.env.BING_MAPS_API_KEY || !changeStates.mapStyle) {
+    if (!import.meta.env.VITE_BING_MAPS_API_KEY || !changeStates.mapStyle) {
       layers.unshift(
         new TileLayer({
           source: new OSM(),
