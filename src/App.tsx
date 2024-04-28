@@ -1,15 +1,12 @@
-import './App.css'
-import Header from './components/Header'
-import Playground from './components/Playground'
+import "./App.css";
+import Playground from "./components/Playground";
 
 function App() {
-
   return (
-    <div className='flex flex-col'>
-      <Header />
+    <div className="flex flex-col w-full min-h-screen">
       <Playground />
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
