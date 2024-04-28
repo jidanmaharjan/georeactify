@@ -127,7 +127,7 @@ const Playground = () => {
             changeStates.drawMode === "Point" && changeStates.pointStyle
               ? new Style({
                   image: new Icon({
-                    src: imageForPoint[changeStates.pointStyle].src,
+                    src: imageForPoint[changeStates.pointStyle],
                     scale: 0.1,
                     rotateWithView: true,
                     // rotation:
@@ -150,7 +150,7 @@ const Playground = () => {
         newFeature.setStyle(
           new Style({
             image: new Icon({
-              src: imageForPoint[changeStates.pointStyle].src,
+              src: imageForPoint[changeStates.pointStyle],
               scale: 0.1,
               rotateWithView: true,
               // rotation:
