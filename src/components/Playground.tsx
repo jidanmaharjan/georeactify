@@ -172,9 +172,7 @@ const Playground = () => {
   }, [changeStates.mapStyle, changeStates.drawMode, changeStates.pointStyle]);
 
   return (
-    <section
-      className={`bg-gray-100 dark:bg-slate-800 flex-grow text-black dark:text-white w-full min-h-screen sm:-m-4`}
-    >
+    <section className={`w-full min-h-screen `}>
       <div
         id="map"
         ref={mapRef}
