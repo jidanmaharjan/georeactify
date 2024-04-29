@@ -14,7 +14,10 @@ import Icon from "ol/style/Icon";
 import Style from "ol/style/Style";
 import { useEffect, useRef, useState } from "react";
 import { BsEmojiSmile } from "react-icons/bs";
-import { getGeolocation } from "../methods/getGeolocation";
+import useGeoLocation from "../hooks/useGeoLocation";
+import { Point } from "ol/geom";
+import { fromLonLat } from "ol/proj";
+import pin from "../assets/pointers/684908.png";
 
 type ChangeStatesType = {
   draw: boolean;
@@ -24,6 +27,7 @@ type ChangeStatesType = {
   drawMode: any | undefined;
   pointStyle: string | undefined;
   features: Feature[];
+  mylocation: boolean;
 };
 
 const mapOptions = [
@@ -37,6 +41,7 @@ const mapOptions = [
 const drawOptions = ["Point", "LineString", "Polygon", "Circle"];
 
 const Playground = () => {
+  const { coordinates } = useGeoLocation();
   const mapRef = useRef<any>(null);
 
   const [changeStates, setChangeStates] = useState<ChangeStatesType>({
@@ -47,9 +52,10 @@ const Playground = () => {
     drawMode: undefined,
     pointStyle: undefined,
     features: [],
+    mylocation: false,
   });
 
-  console.log(getGeolocation());
+  console.log(coordinates);
 
   useEffect(() => {
     const source = new VectorSource({
@@ -148,7 +154,9 @@ const Playground = () => {
     }
     draw?.on("drawend", (e) => {
       const featuresAfterDraw = source.getFeatures();
+
       const newFeature = e.feature;
+      console.log((newFeature as any)?.getGeometry()?.getCoordinates() as any);
       if (changeStates.pointStyle) {
         newFeature.setStyle(
           new Style({
@@ -169,10 +177,44 @@ const Playground = () => {
         features: [...featuresAfterDraw, newFeature],
       }));
     });
+
+    if (changeStates.mylocation) {
+      if (coordinates) {
+        const whereAmI = new Feature({
+          geometry: new Point(
+            fromLonLat([coordinates.longitude, coordinates.latitude])
+          ),
+        });
+        whereAmI.setStyle(
+          new Style({
+            image: new Icon({
+              src: imageForPoint["Pin"] || pin,
+              scale: 0.1,
+              rotateWithView: true,
+              anchor: [0.5, 1],
+              // rotation:
+              //   stateChanges.rotation[stateChanges.pointVariant] *
+              //   (Math.PI / 180),
+            }),
+          })
+        );
+        source.addFeature(whereAmI);
+        map.getView().animate({
+          duration: 1000,
+          center: fromLonLat([coordinates.longitude, coordinates.latitude]),
+          zoom: 15,
+        });
+      }
+    }
     return () => {
       map.dispose();
     };
-  }, [changeStates.mapStyle, changeStates.drawMode, changeStates.pointStyle]);
+  }, [
+    changeStates.mapStyle,
+    changeStates.drawMode,
+    changeStates.pointStyle,
+    coordinates,
+  ]);
 
   return (
     <section className={`w-full min-h-screen `}>
@@ -270,6 +312,9 @@ const Playground = () => {
             </HoverCard>
           </div>
         )}
+        <div className="absolute bottom-4 right-2">
+          <Button></Button>
+        </div>
       </div>
     </section>
   );
