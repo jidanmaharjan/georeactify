@@ -24,6 +24,7 @@ import {
 } from "react-icons/md";
 import { PointCoordType } from "ol/interaction/Draw";
 import BotMenu from "./BotMenu";
+import SideMenu from "./SideMenu";
 
 type ChangeStatesType = {
   draw: boolean;
@@ -264,6 +265,7 @@ const Playground = () => {
         ref={mapRef}
         className="map w-full h-screen relative overflow-hidden"
       >
+        <SideMenu />
         <BotMenu />
         <div className="absolute top-2 right-12 z-20">
           <Select
