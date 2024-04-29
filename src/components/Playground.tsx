@@ -259,7 +259,11 @@ const Playground = () => {
 
   return (
     <section className={`w-full min-h-screen `}>
-      <div id="map" ref={mapRef} className="map w-full h-screen relative">
+      <div
+        id="map"
+        ref={mapRef}
+        className="map w-full h-screen relative overflow-hidden"
+      >
         <BotMenu />
         <div className="absolute top-2 right-12 z-20">
           <Select
