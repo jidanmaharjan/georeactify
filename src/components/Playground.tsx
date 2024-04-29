@@ -14,6 +14,7 @@ import Icon from "ol/style/Icon";
 import Style from "ol/style/Style";
 import { useEffect, useRef, useState } from "react";
 import { BsEmojiSmile } from "react-icons/bs";
+import { getGeolocation } from "../methods/getGeolocation";
 
 type ChangeStatesType = {
   draw: boolean;
@@ -47,6 +48,8 @@ const Playground = () => {
     pointStyle: undefined,
     features: [],
   });
+
+  console.log(getGeolocation());
 
   useEffect(() => {
     const source = new VectorSource({
