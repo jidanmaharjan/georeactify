@@ -19,6 +19,7 @@ import { Point } from "ol/geom";
 import { fromLonLat } from "ol/proj";
 import pin from "../assets/pointers/684908.png";
 import { MdOutlineLocationSearching } from "react-icons/md";
+import { PointCoordType } from "ol/interaction/Draw";
 
 type ChangeStatesType = {
   draw: boolean;
@@ -29,6 +30,11 @@ type ChangeStatesType = {
   pointStyle: string | undefined;
   features: Feature[];
   mylocation: boolean;
+  viewCenter: {
+    view: PointCoordType | undefined;
+    zoom: number;
+    rotation: number;
+  };
 };
 
 const mapOptions = [
@@ -54,6 +60,11 @@ const Playground = () => {
     pointStyle: undefined,
     features: [],
     mylocation: false,
+    viewCenter: {
+      view: undefined,
+      zoom: 2,
+      rotation: 0,
+    },
   });
 
   console.log(coordinates);
@@ -180,6 +191,25 @@ const Playground = () => {
 
     const snap = new Snap({ source: source });
     map.addInteraction(snap);
+
+    const view = map.getView();
+    const handleViewChange = () => {
+      const newRotation = view?.getRotation();
+      const newZoom = view?.getZoom();
+      const newCenter = view?.getCenter();
+      if (newRotation || newZoom || newCenter) {
+        setChangeStates((prev) => ({
+          ...prev,
+          viewCenter: {
+            view: newCenter,
+            zoom: newZoom || 2,
+            rotation: newRotation / (Math.PI / 180),
+          },
+        }));
+      }
+    };
+
+    view.on("change", handleViewChange);
 
     if (changeStates.mylocation) {
       if (coordinates) {
