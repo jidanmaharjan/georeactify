@@ -5,7 +5,7 @@ import Map from "ol/Map";
 import View from "ol/View";
 import { ScaleLine, defaults as defaultControls } from "ol/control";
 import { getCenter } from "ol/extent";
-import { Draw, defaults as defaultInteractions } from "ol/interaction";
+import { Draw, Snap, defaults as defaultInteractions } from "ol/interaction";
 import TileLayer from "ol/layer/Tile";
 import VectorLayer from "ol/layer/Vector";
 import { BingMaps, OSM } from "ol/source";
@@ -18,6 +18,7 @@ import useGeoLocation from "../hooks/useGeoLocation";
 import { Point } from "ol/geom";
 import { fromLonLat } from "ol/proj";
 import pin from "../assets/pointers/684908.png";
+import { MdOutlineLocationSearching } from "react-icons/md";
 
 type ChangeStatesType = {
   draw: boolean;
@@ -178,6 +179,9 @@ const Playground = () => {
       }));
     });
 
+    const snap = new Snap({ source: source });
+    map.addInteraction(snap);
+
     if (changeStates.mylocation) {
       if (coordinates) {
         const whereAmI = new Feature({
@@ -200,20 +204,24 @@ const Playground = () => {
         );
         source.addFeature(whereAmI);
         map.getView().animate({
-          duration: 1000,
+          duration: 0,
           center: fromLonLat([coordinates.longitude, coordinates.latitude]),
-          zoom: 15,
+          zoom: 18,
         });
       }
     }
     return () => {
       map.dispose();
+      if (draw) {
+        map.removeInteraction(draw);
+      }
+      map.removeInteraction(snap);
     };
   }, [
     changeStates.mapStyle,
     changeStates.drawMode,
     changeStates.pointStyle,
-    coordinates,
+    changeStates.mylocation,
   ]);
 
   return (
@@ -312,8 +320,21 @@ const Playground = () => {
             </HoverCard>
           </div>
         )}
-        <div className="absolute bottom-4 right-2">
-          <Button></Button>
+        <div className="absolute bottom-12 right-2 z-20">
+          <Button
+            variant={changeStates.mylocation ? "filled" : "light"}
+            color={"#8b5cf6"}
+            onClick={() => {
+              setChangeStates((prev) => ({
+                ...prev,
+                mylocation: !prev.mylocation,
+              }));
+            }}
+            className="w-4 h-4"
+            style={{ width: 30, height: 30, padding: 0 }}
+          >
+            <MdOutlineLocationSearching />
+          </Button>
         </div>
       </div>
     </section>
