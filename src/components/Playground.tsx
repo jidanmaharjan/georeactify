@@ -18,8 +18,12 @@ import useGeoLocation from "../hooks/useGeoLocation";
 import { Point } from "ol/geom";
 import { fromLonLat } from "ol/proj";
 import pin from "../assets/pointers/684908.png";
-import { MdOutlineLocationSearching } from "react-icons/md";
+import {
+  MdOutlineLocationSearching,
+  MdOutlineMyLocation,
+} from "react-icons/md";
 import { PointCoordType } from "ol/interaction/Draw";
+import BotMenu from "./BotMenu";
 
 type ChangeStatesType = {
   draw: boolean;
@@ -256,6 +260,7 @@ const Playground = () => {
   return (
     <section className={`w-full min-h-screen `}>
       <div id="map" ref={mapRef} className="map w-full h-screen relative">
+        <BotMenu />
         <div className="absolute top-2 right-12 z-20">
           <Select
             placeholder="OSM (default)"
@@ -358,7 +363,11 @@ const Playground = () => {
             className="w-4 h-4"
             style={{ width: 30, height: 30, padding: 0 }}
           >
-            <MdOutlineLocationSearching />
+            {changeStates.mylocation ? (
+              <MdOutlineMyLocation size={24} />
+            ) : (
+              <MdOutlineLocationSearching size={24} />
+            )}
           </Button>
         </div>
       </div>
