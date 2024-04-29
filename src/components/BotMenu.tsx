@@ -14,7 +14,7 @@ const BotMenu = () => {
         {!showMenu ? <IoIosArrowUp size={24} /> : <IoIosArrowDown size={24} />}
       </button>
       <div
-        className={`absolute z-30 h-20 w-full  md:w-[60%] bg-white bottom-0 left-[50%] translate-x-[-50%] rounded-t-2xl shadow-md  transition-transform duration-150 ${
+        className={`absolute z-30 h-20 w-full  md:w-[50%] bg-white bottom-0 left-[50%] translate-x-[-50%] rounded-t-2xl shadow-md  transition-transform duration-150 ${
           !showMenu && "translate-y-[100%]"
         }`}
       ></div>
