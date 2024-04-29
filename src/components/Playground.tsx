@@ -157,8 +157,7 @@ const Playground = () => {
       const featuresAfterDraw = source.getFeatures();
 
       const newFeature = e.feature;
-      console.log((newFeature as any)?.getGeometry()?.getCoordinates() as any);
-      if (changeStates.pointStyle) {
+      if (changeStates.pointStyle && changeStates.drawMode === "Point") {
         newFeature.setStyle(
           new Style({
             image: new Icon({
@@ -226,11 +225,7 @@ const Playground = () => {
 
   return (
     <section className={`w-full min-h-screen `}>
-      <div
-        id="map"
-        ref={mapRef}
-        className="map w-full h-screen border-2 border-white relative"
-      >
+      <div id="map" ref={mapRef} className="map w-full h-screen relative">
         <div className="absolute top-2 right-12 z-20">
           <Select
             placeholder="OSM (default)"
