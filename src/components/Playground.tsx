@@ -241,7 +241,10 @@ const Playground = () => {
         ref={mapRef}
         className="map w-full h-screen relative overflow-hidden"
       >
-        <SideMenu />
+        <SideMenu
+          changeStates={changeStates}
+          setChangeStates={setChangeStates}
+        />
         <BotMenu
           changeStates={changeStates}
           setChangeStates={setChangeStates}
