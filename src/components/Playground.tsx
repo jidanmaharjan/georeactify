@@ -1,54 +1,31 @@
-import { imageForPoint, pointStyles } from "../data/pointStyles";
 import { Button, HoverCard, Indicator, Select } from "@mantine/core";
 import Feature from "ol/Feature";
 import Map from "ol/Map";
 import View from "ol/View";
 import { ScaleLine, defaults as defaultControls } from "ol/control";
 import { getCenter } from "ol/extent";
+import { Point } from "ol/geom";
 import { Draw, Snap, defaults as defaultInteractions } from "ol/interaction";
 import TileLayer from "ol/layer/Tile";
 import VectorLayer from "ol/layer/Vector";
+import { fromLonLat } from "ol/proj";
 import { BingMaps, OSM } from "ol/source";
 import VectorSource from "ol/source/Vector";
 import Icon from "ol/style/Icon";
 import Style from "ol/style/Style";
 import { useEffect, useRef, useState } from "react";
 import { BsEmojiSmile } from "react-icons/bs";
-import useGeoLocation from "../hooks/useGeoLocation";
-import { Point } from "ol/geom";
-import { fromLonLat } from "ol/proj";
-import pin from "../assets/pointers/684908.png";
 import {
   MdOutlineLocationSearching,
   MdOutlineMyLocation,
 } from "react-icons/md";
-import { PointCoordType } from "ol/interaction/Draw";
+import pin from "../assets/pointers/684908.png";
+import { ChangeStatesType } from "../constants/types";
+import { imageForPoint, pointStyles } from "../data/pointStyles";
+import useGeoLocation from "../hooks/useGeoLocation";
 import BotMenu from "./BotMenu";
 import SideMenu from "./SideMenu";
-
-type ChangeStatesType = {
-  draw: boolean;
-  modify: boolean;
-  snap: boolean;
-  mapStyle: string | undefined;
-  drawMode: any | undefined;
-  pointStyle: string | undefined;
-  features: Feature[];
-  mylocation: boolean;
-  viewCenter: {
-    view: PointCoordType | undefined;
-    zoom: number;
-    rotation: number;
-  };
-};
-
-const mapOptions = [
-  "RoadOnDemand",
-  "Aerial",
-  "AerialWithLabelsOnDemand",
-  "CanvasDark",
-  // "OrdnanceSurvey",
-];
+import { mapOptions } from "../constants/options";
 
 const drawOptions = ["Point", "LineString", "Polygon", "Circle"];
 
@@ -266,7 +243,10 @@ const Playground = () => {
         className="map w-full h-screen relative overflow-hidden"
       >
         <SideMenu />
-        <BotMenu />
+        <BotMenu
+          changeStates={changeStates}
+          setChangeStates={setChangeStates}
+        />
         <div className="absolute top-2 right-12 z-20">
           <Select
             placeholder="OSM (default)"
