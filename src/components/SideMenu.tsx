@@ -1,13 +1,12 @@
 import { Button } from "@mantine/core";
 import { useState } from "react";
-import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
-import { RiExchange2Line } from "react-icons/ri";
-import { ChangeStatesType } from "../constants/types";
 import { FaDrawPolygon, FaRegCircle } from "react-icons/fa";
-import { IoAnalyticsOutline } from "react-icons/io5";
-import { pointStyles } from "../data/pointStyles";
 import { GoDotFill } from "react-icons/go";
+import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
+import { IoAnalyticsOutline } from "react-icons/io5";
 import { TbBrushOff } from "react-icons/tb";
+import { ChangeStatesType } from "../constants/types";
+import { pointStyles } from "../data/pointStyles";
 
 interface ISideMenu {
   changeStates: ChangeStatesType;
@@ -16,7 +15,7 @@ interface ISideMenu {
 
 const SideMenu = (props: ISideMenu) => {
   const { changeStates, setChangeStates } = props;
-  const [showMenu, setShowMenu] = useState(false);
+  const [showMenu, setShowMenu] = useState(true);
   return (
     <>
       <button

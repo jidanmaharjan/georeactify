@@ -19,7 +19,7 @@ interface IBotMenu {
 
 const BotMenu = (props: IBotMenu) => {
   const { changeStates, setChangeStates } = props;
-  const [showMenu, setShowMenu] = useState(false);
+  const [showMenu, setShowMenu] = useState(true);
 
   return (
     <>

@@ -15,17 +15,12 @@ import Icon from "ol/style/Icon";
 import Style from "ol/style/Style";
 import { useEffect, useRef, useState } from "react";
 import { BsEmojiSmile } from "react-icons/bs";
-import {
-  MdOutlineLocationSearching,
-  MdOutlineMyLocation,
-} from "react-icons/md";
 import pin from "../assets/pointers/684908.png";
 import { ChangeStatesType } from "../constants/types";
 import { imageForPoint, pointStyles } from "../data/pointStyles";
 import useGeoLocation from "../hooks/useGeoLocation";
 import BotMenu from "./BotMenu";
 import SideMenu from "./SideMenu";
-import { mapOptions } from "../constants/options";
 
 const drawOptions = ["Point", "LineString", "Polygon", "Circle"];
 
@@ -249,79 +244,6 @@ const Playground = () => {
           changeStates={changeStates}
           setChangeStates={setChangeStates}
         />
-        <div className="absolute top-2 left-12 z-20">
-          <Select
-            placeholder="Draw mode"
-            data={drawOptions}
-            className="w-32"
-            onChange={(e) => {
-              if (e) {
-                setChangeStates((prev) => ({ ...prev, drawMode: e }));
-              }
-            }}
-            clearable
-            onClear={() =>
-              setChangeStates((prev) => ({ ...prev, drawMode: undefined }))
-            }
-          />
-        </div>
-        {changeStates.drawMode === "Point" && (
-          <div className="absolute top-16 left-2 z-20">
-            <HoverCard width={280} shadow="md">
-              <HoverCard.Target>
-                <Indicator>
-                  <Button
-                    p={4}
-                    h={30}
-                    variant="filled"
-                    color="#fff"
-                    style={{ color: "#000" }}
-                  >
-                    <BsEmojiSmile />
-                  </Button>
-                </Indicator>
-              </HoverCard.Target>
-              <HoverCard.Dropdown>
-                {pointStyles.map((style) => (
-                  <div key={style.title}>
-                    <p>{style.title}</p>
-                    <div className="flex flex-wrap">
-                      {style.items.map((item) => (
-                        <Button
-                          key={item.title}
-                          variant={
-                            changeStates.pointStyle === item.title
-                              ? "filled"
-                              : "outline"
-                          }
-                          color={
-                            changeStates.pointStyle === item.title
-                              ? "#8b5cf6"
-                              : "gray"
-                          }
-                          className="m-1"
-                          onClick={() =>
-                            setChangeStates((prev) => ({
-                              ...prev,
-                              pointStyle: item.title,
-                            }))
-                          }
-                        >
-                          <img
-                            src={item.icon}
-                            alt={item.title}
-                            width={30}
-                            height={30}
-                          />
-                        </Button>
-                      ))}
-                    </div>
-                  </div>
-                ))}
-              </HoverCard.Dropdown>
-            </HoverCard>
-          </div>
-        )}
       </div>
     </section>
   );
