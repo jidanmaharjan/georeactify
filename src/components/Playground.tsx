@@ -253,6 +253,7 @@ const Playground = () => {
     changeStates.pointStyle,
     changeStates.mylocation,
     changeStates.modify,
+    changeStates.select,
   ]);
 
   return (
