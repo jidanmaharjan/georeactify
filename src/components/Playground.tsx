@@ -2,7 +2,7 @@ import { Button, HoverCard, Indicator, Select } from "@mantine/core";
 import Feature from "ol/Feature";
 import Map from "ol/Map";
 import View from "ol/View";
-import { ScaleLine, defaults as defaultControls } from "ol/control";
+import { FullScreen, ScaleLine, defaults as defaultControls } from "ol/control";
 import { getCenter } from "ol/extent";
 import { Point } from "ol/geom";
 import { Draw, Snap, defaults as defaultInteractions } from "ol/interaction";
@@ -49,8 +49,6 @@ const Playground = () => {
     },
   });
 
-  console.log(coordinates);
-
   useEffect(() => {
     const source = new VectorSource({
       features: changeStates.features as any,
@@ -62,7 +60,7 @@ const Playground = () => {
 
         style: {
           "fill-color": "rgba(255, 255, 255, 0.2)",
-          "stroke-color": "#6366f1",
+          "stroke-color": import.meta.env.VITE_PRIMARY_COLOR,
           "stroke-width": 2,
           "circle-radius": 5,
           "circle-fill-color": "#8b5cf6",
@@ -118,6 +116,7 @@ const Playground = () => {
           bar: true,
           minWidth: 140,
         }),
+        new FullScreen(),
       ]),
     });
 

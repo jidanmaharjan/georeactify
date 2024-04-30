@@ -8,6 +8,9 @@ import {
   MdOutlineMyLocation,
   MdOutlineLocationSearching,
 } from "react-icons/md";
+import { CgRedo, CgUndo } from "react-icons/cg";
+import { PiSelectionAll } from "react-icons/pi";
+import { RiExchange2Line } from "react-icons/ri";
 
 interface IBotMenu {
   changeStates: ChangeStatesType;
@@ -29,7 +32,7 @@ const BotMenu = (props: IBotMenu) => {
         {!showMenu ? <IoIosArrowUp size={24} /> : <IoIosArrowDown size={24} />}
       </button>
       <div
-        className={`absolute z-30 h-20 w-full  md:w-[50%] bg-white bottom-0 left-[50%] translate-x-[-50%] rounded-t-2xl shadow-md p-4 flex gap-4 items-center transition-transform duration-150 ${
+        className={`absolute z-30 h-20 w-full  md:w-fit bg-white bottom-0 left-[50%] translate-x-[-50%] rounded-t-2xl shadow-md p-4 flex gap-4 justify-between items-center transition-transform duration-150 ${
           !showMenu && "translate-y-[100%]"
         }`}
       >
@@ -82,6 +85,56 @@ const BotMenu = (props: IBotMenu) => {
           ) : (
             <MdOutlineLocationSearching size={20} />
           )}
+        </Button>
+        <Button
+          color={import.meta.env.VITE_PRIMARY_COLOR}
+          variant={"light"}
+          onClick={() => {
+            console.log("undo");
+          }}
+          className="w-4 h-4"
+          style={{ width: 40, height: 40, padding: 1, borderRadius: "50%" }}
+        >
+          <CgUndo size={20} />
+        </Button>
+        <Button
+          color={import.meta.env.VITE_PRIMARY_COLOR}
+          variant={"light"}
+          onClick={() => {
+            console.log("redo");
+          }}
+          className="w-4 h-4"
+          style={{ width: 40, height: 40, padding: 1, borderRadius: "50%" }}
+        >
+          <CgRedo size={20} />
+        </Button>
+        <Button
+          color={import.meta.env.VITE_PRIMARY_COLOR}
+          variant={changeStates.mylocation ? "filled" : "light"}
+          onClick={() => {
+            setChangeStates((prev) => ({
+              ...prev,
+              mylocation: !prev.mylocation,
+            }));
+          }}
+          className="w-4 h-4"
+          style={{ width: 40, height: 40, padding: 1, borderRadius: "50%" }}
+        >
+          <PiSelectionAll size={20} />
+        </Button>
+        <Button
+          color={import.meta.env.VITE_PRIMARY_COLOR}
+          variant={changeStates.mylocation ? "filled" : "light"}
+          onClick={() => {
+            setChangeStates((prev) => ({
+              ...prev,
+              mylocation: !prev.mylocation,
+            }));
+          }}
+          className="w-4 h-4"
+          style={{ width: 40, height: 40, padding: 1, borderRadius: "50%" }}
+        >
+          <RiExchange2Line size={20} />
         </Button>
       </div>
     </>
