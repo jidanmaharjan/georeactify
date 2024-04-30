@@ -247,22 +247,6 @@ const Playground = () => {
           changeStates={changeStates}
           setChangeStates={setChangeStates}
         />
-        <div className="absolute top-2 right-12 z-20">
-          <Select
-            placeholder="OSM (default)"
-            data={mapOptions}
-            className="w-40"
-            onChange={(e) => {
-              if (e) {
-                setChangeStates((prev) => ({ ...prev, mapStyle: e }));
-              }
-            }}
-            clearable
-            onClear={() =>
-              setChangeStates((prev) => ({ ...prev, mapStyle: undefined }))
-            }
-          />
-        </div>
         <div className="absolute top-2 left-12 z-20">
           <Select
             placeholder="Draw mode"
@@ -336,26 +320,6 @@ const Playground = () => {
             </HoverCard>
           </div>
         )}
-        <div className="absolute bottom-12 right-2 z-20">
-          <Button
-            variant={changeStates.mylocation ? "filled" : "light"}
-            color={"#8b5cf6"}
-            onClick={() => {
-              setChangeStates((prev) => ({
-                ...prev,
-                mylocation: !prev.mylocation,
-              }));
-            }}
-            className="w-4 h-4"
-            style={{ width: 30, height: 30, padding: 0 }}
-          >
-            {changeStates.mylocation ? (
-              <MdOutlineMyLocation size={24} />
-            ) : (
-              <MdOutlineLocationSearching size={24} />
-            )}
-          </Button>
-        </div>
       </div>
     </section>
   );

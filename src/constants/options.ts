@@ -6,7 +6,7 @@ import darkmap from "../assets/icons/darkmap.png";
 
 export const mapOptions = [
   {
-    value: "",
+    value: undefined,
     label: "OSM (default)",
     icon: osm,
   },
