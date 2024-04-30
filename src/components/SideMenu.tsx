@@ -7,6 +7,7 @@ import { FaDrawPolygon, FaRegCircle } from "react-icons/fa";
 import { IoAnalyticsOutline } from "react-icons/io5";
 import { pointStyles } from "../data/pointStyles";
 import { GoDotFill } from "react-icons/go";
+import { TbBrushOff } from "react-icons/tb";
 
 interface ISideMenu {
   changeStates: ChangeStatesType;
@@ -125,6 +126,22 @@ const SideMenu = (props: ISideMenu) => {
             </Button>
           ))
         )}
+        <Button
+          color={import.meta.env.VITE_PRIMARY_COLOR}
+          variant={"light"}
+          onClick={() => {
+            setChangeStates((prev) => ({
+              ...prev,
+              drawMode: undefined,
+              pointStyle: undefined,
+            }));
+          }}
+          className="col-span-2"
+          radius={"lg"}
+          style={{ height: 40, padding: 1 }}
+        >
+          <TbBrushOff size={20} />
+        </Button>
       </div>
     </>
   );
