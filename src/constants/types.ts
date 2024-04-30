@@ -10,6 +10,7 @@ export type ChangeStatesType = {
   drawMode: any | undefined;
   pointStyle: string | undefined;
   features: Feature[];
+  selectedFeatures: Feature[];
   mylocation: boolean;
   viewCenter: {
     view: PointCoordType | undefined;

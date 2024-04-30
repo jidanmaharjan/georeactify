@@ -4,7 +4,12 @@ import View from "ol/View";
 import { FullScreen, ScaleLine, defaults as defaultControls } from "ol/control";
 import { getCenter } from "ol/extent";
 import { Point } from "ol/geom";
-import { Draw, Snap, defaults as defaultInteractions } from "ol/interaction";
+import {
+  Draw,
+  Modify,
+  Snap,
+  defaults as defaultInteractions,
+} from "ol/interaction";
 import TileLayer from "ol/layer/Tile";
 import VectorLayer from "ol/layer/Vector";
 import { fromLonLat } from "ol/proj";
@@ -20,6 +25,7 @@ import useGeoLocation from "../hooks/useGeoLocation";
 import BotMenu from "./BotMenu";
 import ConditionalMenu from "./ConditionalMenu";
 import SideMenu from "./SideMenu";
+import Select, { SelectEvent } from "ol/interaction/Select";
 
 const Playground = () => {
   const { coordinates } = useGeoLocation();
@@ -36,6 +42,7 @@ const Playground = () => {
     drawMode: undefined,
     pointStyle: undefined,
     features: [],
+    selectedFeatures: [],
     mylocation: false,
     viewCenter: {
       view: undefined,
@@ -176,6 +183,30 @@ const Playground = () => {
       }
     };
 
+    const modify = changeStates.modify ? new Modify({ source: source }) : null;
+    if (modify) {
+      map.addInteraction(modify);
+    }
+    modify?.on("modifyend", () => {
+      const featuresAfterModify = source.getFeatures();
+      setChangeStates((prev) => ({
+        ...prev,
+        features: featuresAfterModify,
+      }));
+    });
+
+    const select = changeStates.select ? new Select() : null;
+    if (changeStates.select && select) {
+      map.addInteraction(select);
+      select.on("select", (e: SelectEvent) => {
+        const selectedFeaturesArray = e.target.getFeatures().getArray();
+        setChangeStates((prev) => ({
+          ...prev,
+          selectedFeatures: selectedFeaturesArray,
+        }));
+      });
+    }
+
     view.on("change", handleViewChange);
 
     if (changeStates.mylocation) {
@@ -211,6 +242,9 @@ const Playground = () => {
       if (draw) {
         map.removeInteraction(draw);
       }
+      if (modify) {
+        map.removeInteraction(modify);
+      }
       map.removeInteraction(snap);
     };
   }, [
@@ -218,6 +252,7 @@ const Playground = () => {
     changeStates.drawMode,
     changeStates.pointStyle,
     changeStates.mylocation,
+    changeStates.modify,
   ]);
 
   return (

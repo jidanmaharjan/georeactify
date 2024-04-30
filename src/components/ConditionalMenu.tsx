@@ -16,21 +16,28 @@ const ConditionalMenu = (props: IConditionalMenu) => {
       <div
         className={`absolute z-30 w-fit h-fit  right-4 bottom-24 p-4 flex flex-col gap-4`}
       >
-        <Button
-          color={import.meta.env.VITE_PRIMARY_COLOR}
-          variant={"white"}
-          onClick={() => {
-            setChangeStates((prev) => ({
-              ...prev,
-              drawMode: undefined,
-              pointStyle: undefined,
-            }));
-          }}
-          radius={"xl"}
-          style={{ width: 40, height: 40, padding: 1 }}
-        >
-          <FiTrash size={20} />
-        </Button>
+        {changeStates.selectedFeatures.length > 0 && (
+          <Button
+            color={import.meta.env.VITE_PRIMARY_COLOR}
+            variant={"white"}
+            onClick={() => {
+              changeStates.selectedFeatures.forEach((feature: any) => {
+                sourceInstance.removeFeature(feature);
+              });
+              setChangeStates((prev) => ({
+                ...prev,
+                features: prev.features.filter(
+                  (feature) => !prev.selectedFeatures.includes(feature)
+                ),
+                selectedFeatures: [],
+              }));
+            }}
+            radius={"xl"}
+            style={{ width: 40, height: 40, padding: 1 }}
+          >
+            <FiTrash size={20} />
+          </Button>
+        )}
         {changeStates.features.length > 0 && (
           <Button
             color={import.meta.env.VITE_PRIMARY_COLOR}
