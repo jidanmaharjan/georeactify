@@ -41,6 +41,8 @@ const SideMenu = (props: ISideMenu) => {
           onClick={() => {
             setChangeStates((prev) => ({
               ...prev,
+              modify: false,
+              select: false,
               drawMode: "LineString",
               pointStyle: undefined,
             }));
@@ -56,6 +58,8 @@ const SideMenu = (props: ISideMenu) => {
           onClick={() => {
             setChangeStates((prev) => ({
               ...prev,
+              modify: false,
+              select: false,
               drawMode: "Polygon",
               pointStyle: undefined,
             }));
@@ -71,6 +75,8 @@ const SideMenu = (props: ISideMenu) => {
           onClick={() => {
             setChangeStates((prev) => ({
               ...prev,
+              modify: false,
+              select: false,
               drawMode: "Circle",
               pointStyle: undefined,
             }));
@@ -91,6 +97,8 @@ const SideMenu = (props: ISideMenu) => {
           onClick={() => {
             setChangeStates((prev) => ({
               ...prev,
+              modify: false,
+              select: false,
               drawMode: "Point",
               pointStyle: undefined,
             }));
@@ -116,6 +124,8 @@ const SideMenu = (props: ISideMenu) => {
               onClick={() =>
                 setChangeStates((prev) => ({
                   ...prev,
+                  modify: false,
+                  select: false,
                   drawMode: "Point",
                   pointStyle: item.title,
                 }))
