@@ -1,4 +1,3 @@
-import { Button, HoverCard, Indicator, Select } from "@mantine/core";
 import Feature from "ol/Feature";
 import Map from "ol/Map";
 import View from "ol/View";
@@ -14,22 +13,23 @@ import VectorSource from "ol/source/Vector";
 import Icon from "ol/style/Icon";
 import Style from "ol/style/Style";
 import { useEffect, useRef, useState } from "react";
-import { BsEmojiSmile } from "react-icons/bs";
 import pin from "../assets/pointers/684908.png";
 import { ChangeStatesType } from "../constants/types";
-import { imageForPoint, pointStyles } from "../data/pointStyles";
+import { imageForPoint } from "../data/pointStyles";
 import useGeoLocation from "../hooks/useGeoLocation";
 import BotMenu from "./BotMenu";
+import ConditionalMenu from "./ConditionalMenu";
 import SideMenu from "./SideMenu";
-
-const drawOptions = ["Point", "LineString", "Polygon", "Circle"];
 
 const Playground = () => {
   const { coordinates } = useGeoLocation();
   const mapRef = useRef<any>(null);
 
+  const [sourceInstance, setSourceInstance] = useState<any>(null);
+
   const [changeStates, setChangeStates] = useState<ChangeStatesType>({
     draw: false,
+    select: false,
     modify: false,
     snap: false,
     mapStyle: undefined,
@@ -82,18 +82,7 @@ const Playground = () => {
         })
       );
     }
-    // main - map
-    // let shiftPressed = false;
-    // addEventListener("keydown", (e) => {
-    //   if (e.key === "Shift") {
-    //     shiftPressed = true;
-    //   }
-    // });
-    // addEventListener("keyup", (e) => {
-    //   if (e.key === "Shift") {
-    //     shiftPressed = false;
-    //   }
-    // });
+
     const map = new Map({
       view: new View({
         center: getCenter([0, 0, 0, 0]),
@@ -114,6 +103,8 @@ const Playground = () => {
         new FullScreen(),
       ]),
     });
+
+    setSourceInstance(source);
 
     const draw = changeStates.drawMode
       ? new Draw({
@@ -243,6 +234,11 @@ const Playground = () => {
         <BotMenu
           changeStates={changeStates}
           setChangeStates={setChangeStates}
+        />
+        <ConditionalMenu
+          changeStates={changeStates}
+          setChangeStates={setChangeStates}
+          sourceInstance={sourceInstance}
         />
       </div>
     </section>

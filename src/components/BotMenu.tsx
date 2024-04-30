@@ -110,11 +110,11 @@ const BotMenu = (props: IBotMenu) => {
         </Button>
         <Button
           color={import.meta.env.VITE_PRIMARY_COLOR}
-          variant={changeStates.mylocation ? "filled" : "light"}
+          variant={changeStates.select ? "filled" : "light"}
           onClick={() => {
             setChangeStates((prev) => ({
               ...prev,
-              mylocation: !prev.mylocation,
+              select: !prev.select,
             }));
           }}
           className="w-4 h-4"
@@ -124,11 +124,11 @@ const BotMenu = (props: IBotMenu) => {
         </Button>
         <Button
           color={import.meta.env.VITE_PRIMARY_COLOR}
-          variant={changeStates.mylocation ? "filled" : "light"}
+          variant={changeStates.modify ? "filled" : "light"}
           onClick={() => {
             setChangeStates((prev) => ({
               ...prev,
-              mylocation: !prev.mylocation,
+              modify: !prev.modify,
             }));
           }}
           className="w-4 h-4"

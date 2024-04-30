@@ -3,6 +3,7 @@ import { PointCoordType } from "ol/interaction/Draw";
 
 export type ChangeStatesType = {
   draw: boolean;
+  select: boolean;
   modify: boolean;
   snap: boolean;
   mapStyle: string | undefined;
