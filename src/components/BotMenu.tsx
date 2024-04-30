@@ -115,6 +115,8 @@ const BotMenu = (props: IBotMenu) => {
             setChangeStates((prev) => ({
               ...prev,
               select: !prev.select,
+              drawMode: undefined,
+              pointStyle: undefined,
             }));
           }}
           className="w-4 h-4"
@@ -129,6 +131,8 @@ const BotMenu = (props: IBotMenu) => {
             setChangeStates((prev) => ({
               ...prev,
               modify: !prev.modify,
+              drawMode: undefined,
+              pointStyle: undefined,
             }));
           }}
           className="w-4 h-4"
