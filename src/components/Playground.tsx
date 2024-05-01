@@ -26,6 +26,7 @@ import BotMenu from "./BotMenu";
 import ConditionalMenu from "./ConditionalMenu";
 import SideMenu from "./SideMenu";
 import Select, { SelectEvent } from "ol/interaction/Select";
+import Text from "ol/style/Text";
 
 const Playground = () => {
   const { coordinates } = useGeoLocation();
@@ -50,6 +51,56 @@ const Playground = () => {
       rotation: 0,
     },
   });
+
+  const [refresh, setRefresh] = useState(false);
+
+  const [drawHistory, setDrawHistory] = useState<Feature[][]>([]);
+  const [drawFuture, setDrawFuture] = useState<Feature[][]>([]);
+
+  const refreshMap = () => {
+    setRefresh((prev) => !prev);
+  };
+
+  const saveFeatures = (featuresToSave: any) => {
+    const filteredFeatures = featuresToSave?.filter(
+      (f: any) => f.getStyle()?.text_?.text_ !== "whereami"
+    );
+    setDrawHistory([...drawHistory, changeStates.features]);
+    setChangeStates((prev) => ({
+      ...prev,
+      features: filteredFeatures,
+    }));
+  };
+
+  const undoDrawing = () => {
+    const tempArray = drawHistory;
+    const lastDraw = tempArray.pop();
+    if (lastDraw) {
+      setDrawFuture((prev) => [...prev, changeStates.features]);
+      setChangeStates((prev) => ({
+        ...prev,
+        features: lastDraw,
+      }));
+      setDrawHistory(tempArray);
+      refreshMap();
+    }
+  };
+
+  console.log(changeStates.features, drawHistory, drawFuture);
+
+  const redoDrawing = () => {
+    const tempArray = drawFuture;
+    const lastDraw = tempArray.pop();
+    if (lastDraw) {
+      setDrawHistory((prev) => [...prev, changeStates.features]);
+      setChangeStates((prev) => ({
+        ...prev,
+        features: lastDraw,
+      }));
+      setDrawFuture(tempArray);
+      refreshMap();
+    }
+  };
 
   useEffect(() => {
     const source = new VectorSource({
@@ -157,10 +208,7 @@ const Playground = () => {
         );
       }
 
-      setChangeStates((prev) => ({
-        ...prev,
-        features: [...featuresAfterDraw, newFeature],
-      }));
+      saveFeatures([...featuresAfterDraw, newFeature]);
     });
 
     const snap = new Snap({ source: source });
@@ -189,10 +237,7 @@ const Playground = () => {
     }
     modify?.on("modifyend", () => {
       const featuresAfterModify = source.getFeatures();
-      setChangeStates((prev) => ({
-        ...prev,
-        features: featuresAfterModify,
-      }));
+      saveFeatures(featuresAfterModify);
     });
 
     const select = changeStates.select ? new Select() : null;
@@ -200,9 +245,12 @@ const Playground = () => {
       map.addInteraction(select);
       select.on("select", (e: SelectEvent) => {
         const selectedFeaturesArray = e.target.getFeatures().getArray();
+        const filteredSelectedFeatures = selectedFeaturesArray.filter(
+          (f: any) => f.getStyle()?.text_?.text_ !== "whereami"
+        );
         setChangeStates((prev) => ({
           ...prev,
-          selectedFeatures: selectedFeaturesArray,
+          selectedFeatures: filteredSelectedFeatures,
         }));
       });
     }
@@ -227,11 +275,16 @@ const Playground = () => {
               //   stateChanges.rotation[stateChanges.pointVariant] *
               //   (Math.PI / 180),
             }),
+            text: new Text({
+              text: "whereami",
+              offsetY: -20,
+              scale: 0,
+            }),
           })
         );
         source.addFeature(whereAmI);
         map.getView().animate({
-          duration: 0,
+          duration: 1000,
           center: fromLonLat([coordinates.longitude, coordinates.latitude]),
           zoom: 18,
         });
@@ -254,6 +307,7 @@ const Playground = () => {
     changeStates.mylocation,
     changeStates.modify,
     changeStates.select,
+    refresh,
   ]);
 
   return (
@@ -270,6 +324,8 @@ const Playground = () => {
         <BotMenu
           changeStates={changeStates}
           setChangeStates={setChangeStates}
+          undoDrawing={undoDrawing}
+          redoDrawing={redoDrawing}
         />
         <ConditionalMenu
           changeStates={changeStates}

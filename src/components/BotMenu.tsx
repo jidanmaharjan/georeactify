@@ -15,10 +15,12 @@ import { RiExchange2Line } from "react-icons/ri";
 interface IBotMenu {
   changeStates: ChangeStatesType;
   setChangeStates: React.Dispatch<React.SetStateAction<ChangeStatesType>>;
+  undoDrawing: () => void;
+  redoDrawing: () => void;
 }
 
 const BotMenu = (props: IBotMenu) => {
-  const { changeStates, setChangeStates } = props;
+  const { changeStates, setChangeStates, undoDrawing, redoDrawing } = props;
   const [showMenu, setShowMenu] = useState(true);
 
   return (
@@ -90,7 +92,7 @@ const BotMenu = (props: IBotMenu) => {
           color={import.meta.env.VITE_PRIMARY_COLOR}
           variant={"light"}
           onClick={() => {
-            console.log("undo");
+            undoDrawing();
           }}
           className="w-4 h-4"
           style={{ width: 40, height: 40, padding: 1, borderRadius: "50%" }}
@@ -101,7 +103,7 @@ const BotMenu = (props: IBotMenu) => {
           color={import.meta.env.VITE_PRIMARY_COLOR}
           variant={"light"}
           onClick={() => {
-            console.log("redo");
+            redoDrawing();
           }}
           className="w-4 h-4"
           style={{ width: 40, height: 40, padding: 1, borderRadius: "50%" }}
