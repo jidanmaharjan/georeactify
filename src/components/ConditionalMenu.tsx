@@ -9,10 +9,11 @@ interface IConditionalMenu {
   changeStates: ChangeStatesType;
   setChangeStates: React.Dispatch<React.SetStateAction<ChangeStatesType>>;
   sourceInstance: any;
+  saveFeatures: (featuresToSave: any) => void;
 }
 
 const ConditionalMenu = (props: IConditionalMenu) => {
-  const { changeStates, setChangeStates, sourceInstance } = props;
+  const { changeStates, sourceInstance, saveFeatures } = props;
   const [deleteModal, setDeleteModal] = useState(false);
   const [clearModal, setClearModal] = useState(false);
   return (
@@ -32,13 +33,12 @@ const ConditionalMenu = (props: IConditionalMenu) => {
               changeStates.selectedFeatures.forEach((feature: any) => {
                 sourceInstance.removeFeature(feature);
               });
-              setChangeStates((prev) => ({
-                ...prev,
-                features: prev.features.filter(
-                  (feature) => !prev.selectedFeatures.includes(feature)
-                ),
-                selectedFeatures: [],
-              }));
+              saveFeatures(
+                changeStates.features.filter(
+                  (feature) => !changeStates.selectedFeatures.includes(feature)
+                )
+              );
+
               setDeleteModal(false);
             }}
             className="mr-4"
@@ -62,10 +62,7 @@ const ConditionalMenu = (props: IConditionalMenu) => {
           <Button
             color="red"
             onClick={() => {
-              setChangeStates((prev) => ({
-                ...prev,
-                features: [],
-              }));
+              saveFeatures([]);
               sourceInstance.clear();
               setClearModal(false);
             }}

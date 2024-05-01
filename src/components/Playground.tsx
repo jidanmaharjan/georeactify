@@ -329,6 +329,7 @@ const Playground = () => {
         />
         <ConditionalMenu
           changeStates={changeStates}
+          saveFeatures={saveFeatures}
           setChangeStates={setChangeStates}
           sourceInstance={sourceInstance}
         />
