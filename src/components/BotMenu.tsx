@@ -1,16 +1,16 @@
-import { Button, Menu, Select, rem } from "@mantine/core";
+import { Button, Menu } from "@mantine/core";
 import { useState } from "react";
-import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
-import { ChangeStatesType } from "../constants/types";
-import { mapOptions } from "../constants/options";
-import { TbMapCog } from "react-icons/tb";
-import {
-  MdOutlineMyLocation,
-  MdOutlineLocationSearching,
-} from "react-icons/md";
 import { CgRedo, CgUndo } from "react-icons/cg";
+import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
+import {
+  MdOutlineLocationSearching,
+  MdOutlineMyLocation,
+} from "react-icons/md";
 import { PiSelectionAll } from "react-icons/pi";
 import { RiExchange2Line } from "react-icons/ri";
+import { TbMapCog } from "react-icons/tb";
+import { mapOptions } from "../constants/options";
+import { ChangeStatesType } from "../constants/types";
 
 interface IBotMenu {
   changeStates: ChangeStatesType;
