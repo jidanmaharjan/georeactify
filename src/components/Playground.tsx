@@ -52,24 +52,21 @@ const Playground = () => {
     },
   });
 
-  const [refresh, setRefresh] = useState(false);
-
   const [drawHistory, setDrawHistory] = useState<Feature[][]>([]);
   const [drawFuture, setDrawFuture] = useState<Feature[][]>([]);
-
-  const refreshMap = () => {
-    setRefresh((prev) => !prev);
-  };
 
   const saveFeatures = (featuresToSave: any) => {
     const filteredFeatures = featuresToSave?.filter(
       (f: any) => f.getStyle()?.text_?.text_ !== "whereami"
     );
-    setDrawHistory([...drawHistory, changeStates.features]);
-    setChangeStates((prev) => ({
-      ...prev,
-      features: filteredFeatures,
-    }));
+
+    setDrawHistory((his) => [...his, changeStates.features]);
+    setChangeStates((prev) => {
+      return {
+        ...prev,
+        features: filteredFeatures,
+      };
+    });
   };
 
   const undoDrawing = () => {
@@ -82,11 +79,8 @@ const Playground = () => {
         features: lastDraw,
       }));
       setDrawHistory(tempArray);
-      refreshMap();
     }
   };
-
-  console.log(changeStates.features, drawHistory, drawFuture);
 
   const redoDrawing = () => {
     const tempArray = drawFuture;
@@ -98,7 +92,6 @@ const Playground = () => {
         features: lastDraw,
       }));
       setDrawFuture(tempArray);
-      refreshMap();
     }
   };
 
@@ -143,9 +136,10 @@ const Playground = () => {
 
     const map = new Map({
       view: new View({
-        center: getCenter([0, 0, 0, 0]),
-        zoom: 2,
+        center: changeStates.viewCenter.view || getCenter([0, 0, 0, 0]),
+        zoom: changeStates.viewCenter.zoom || 2,
         maxZoom: 20,
+        rotation: changeStates.viewCenter.rotation || 0,
       }),
       target: mapRef.current,
       layers: layers,
@@ -283,13 +277,19 @@ const Playground = () => {
           })
         );
         source.addFeature(whereAmI);
+      }
+    }
+
+    document
+      .getElementById("focusmylocation")
+      ?.addEventListener("click", () => {
         map.getView().animate({
           duration: 1000,
           center: fromLonLat([coordinates.longitude, coordinates.latitude]),
           zoom: 18,
         });
-      }
-    }
+      });
+
     return () => {
       map.dispose();
       if (draw) {
@@ -307,7 +307,7 @@ const Playground = () => {
     changeStates.mylocation,
     changeStates.modify,
     changeStates.select,
-    refresh,
+    changeStates.features,
   ]);
 
   return (

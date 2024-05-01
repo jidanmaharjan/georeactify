@@ -50,8 +50,9 @@ const BotMenu = (props: IBotMenu) => {
           </Menu.Target>
           <Menu.Dropdown>
             <Menu.Label>Select Map</Menu.Label>
-            {mapOptions.map((option) => (
+            {mapOptions.map((option, index) => (
               <Menu.Item
+                key={index}
                 color={
                   changeStates.mapStyle === option.value
                     ? import.meta.env.VITE_PRIMARY_COLOR

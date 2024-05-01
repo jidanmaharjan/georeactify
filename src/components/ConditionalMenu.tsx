@@ -3,6 +3,7 @@ import { FiTrash } from "react-icons/fi";
 import { PiPaintBrushBroad } from "react-icons/pi";
 import { ChangeStatesType } from "../constants/types";
 import { useState } from "react";
+import { CiLocationArrow1 } from "react-icons/ci";
 
 interface IConditionalMenu {
   changeStates: ChangeStatesType;
@@ -80,6 +81,17 @@ const ConditionalMenu = (props: IConditionalMenu) => {
             Cancel
           </Button>
         </Modal>
+        {changeStates.mylocation && (
+          <Button
+            color={import.meta.env.VITE_PRIMARY_COLOR}
+            variant={"white"}
+            id="focusmylocation"
+            radius={"xl"}
+            style={{ width: 40, height: 40, padding: 1 }}
+          >
+            <CiLocationArrow1 size={20} />
+          </Button>
+        )}
         {changeStates.selectedFeatures.length > 0 && (
           <Button
             color={import.meta.env.VITE_PRIMARY_COLOR}
