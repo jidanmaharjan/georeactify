@@ -33,8 +33,9 @@ npm install
 ## Usage
 To start the development server and view the application in your browser, run:
 ```bash
-npm start
+npm run dev
 ```
+Access development server through http://localhost:5173
 
 ## Contributing
 Contributions are welcome! Please read the contributing guidelines before submitting a pull request.
