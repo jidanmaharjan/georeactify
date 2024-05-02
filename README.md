@@ -28,13 +28,16 @@ To install GeoReactify, clone the repository and install dependencies using npm:
 git clone https://github.com/your_username/geo-reactify.git
 cd geo-reactify
 npm install
+```
 
-Usage
+## Usage
 To start the development server and view the application in your browser, run:
+```bash
 npm start
+```
 
-Contributing
+## Contributing
 Contributions are welcome! Please read the contributing guidelines before submitting a pull request.
 
-License
+## License
 This project is licensed under the MIT License. See the LICENSE file for details.
